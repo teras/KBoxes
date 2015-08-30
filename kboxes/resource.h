@@ -25,18 +25,6 @@
 ///////////////////////////////////////////////////////////////////
 // resource.h  -- contains macros used for commands
 
-#define ID_BUTTON_1		1
-#define ID_BUTTON_2		1
-#define ID_BUTTON_3		1
-#define ID_BUTTON_4		1
-#define ID_BUTTON_5		1
-#define ID_BUTTON_6		1
-#define ID_BUTTON_7		1
-#define ID_BUTTON_8		1
-#define ID_BUTTON_9		1
-#define ID_BUTTON_10		1
-
-
 ///////////////////////////////////////////////////////////////////
 // General application values
 #define IDS_APP_ABOUT               "         KBoxes!\nVersion " VERSION \

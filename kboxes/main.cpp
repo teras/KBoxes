@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
   KBoxes *kboxes=new KBoxes();
   a.setMainWidget(kboxes);
 
-  kboxes->setCaption("Boxes !");
+  kboxes->setCaption("KBoxes !");
   kboxes->show();
 
   return a.exec();

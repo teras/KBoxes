@@ -3,11 +3,11 @@
 sub_dirs=en,
 type=normal
 [Workspace_1]
-openfiles=Untitled.h,Untitled.cpp,/home/teras/kboxes/kboxes/kboxes.h,/home/teras/kboxes/kboxes/main.cpp,/home/teras/kboxes/kboxes/kboxes.cpp,
+openfiles=Untitled.h,Untitled.cpp,/home/teras/develop/kboxes/kboxes/kboxes.h,/home/teras/develop/kboxes/kboxes/main.cpp,/home/teras/develop/kboxes/kboxes/kboxes.cpp,/home/teras/develop/kboxes/kboxes/resource.h,
 show_outputview=true
 show_treeview=true
-header_file=/home/teras/kboxes/kboxes/kboxes.h
-cpp_file=/home/teras/kboxes/kboxes/kboxes.cpp
+header_file=/home/teras/develop/kboxes/kboxes/kboxes.h
+cpp_file=/home/teras/develop/kboxes/kboxes/kboxes.cpp
 browser_file=file:/usr/lib/qt/doc/qmainwindow.html#details
 [COPYING]
 install_location=
@@ -124,7 +124,7 @@ project_type=normal_qt
 sub_dir=kboxes/
 lfv_open_groups=Headers,Sources,GNU,Others,
 workspace=1
-version=1.2
+version=1.3
 project_name=KBoxes
 sgml_file=/home/teras/kboxes/kboxes/docs/en/index.sgml
 short_info=,

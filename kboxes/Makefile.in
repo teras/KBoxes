@@ -206,7 +206,7 @@ all: all-redirect
 .SUFFIXES: .S .c .cpp .lo .o .s
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
 	cd $(top_srcdir) && $(AUTOMAKE) --gnu --include-deps kboxes/Makefile
-	cd $(top_srcdir) && perl automoc kboxes-1.2/kboxes/Makefile.in
+	cd $(top_srcdir) && perl automoc kboxes-1.3/kboxes/Makefile.in
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \

@@ -110,6 +110,8 @@ class KBoxes : public QMainWindow
 	void playerLooses();
 	/** Come here when the player wins. */
 	void playerWins();
+	/** Count how many spaces a string has */
+	int countSpaces ( const string & str) const;
 
 	/** How smart the program should be */
 	int skill;
@@ -121,7 +123,7 @@ class KBoxes : public QMainWindow
 	/** Store the number of the last selected box. Become -1 if none is selected. */
 	int clicked;
 	/** Artficial "inteligence" level data */
-	string level[17];
+	string level[34];
 	/** General map of boxes */
 	char map[17];	// last positions stores the null character;
 	/** Map of free areas. Contains 2 characters per entry.
@@ -132,5 +134,22 @@ class KBoxes : public QMainWindow
 	string freeMap;
 
 };
-#endif 
+
+#define ID_ONE_PLAYER 1000
+#define ID_TWO_PLAYERS 1001
+#define ID_FIRST_COMPUTER 2000
+
+#define ID_DIFFICULTY_BASE 3000
+#define ID_DIFFICULTY_BEGIN ID_DIFFICULTY_BASE
+#define ID_DIFFICULTY_INTER ID_DIFFICULTY_BASE+1
+#define ID_DIFFICULTY_PROF ID_DIFFICULTY_BASE+2
+#define ID_DIFFICULTY_IMPOS ID_DIFFICULTY_BASE+3
+
+#define SKILL_BEGIN 5
+#define SKILL_INTER 10
+#define SKILL_PROF 14
+#define SKILL_IMPOS 34
+
+
+#endif
 

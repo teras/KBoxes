@@ -17,19 +17,6 @@
 
 #include "kboxes.h"
 
-#define ID_ONE_PLAYER 1000
-#define ID_TWO_PLAYERS 1001
-#define ID_FIRST_COMPUTER 2000
-
-#define ID_DIFFICULTY_BASE 3000
-#define ID_DIFFICULTY_BEGIN ID_DIFFICULTY_BASE
-#define ID_DIFFICULTY_INTER ID_DIFFICULTY_BASE+1
-#define ID_DIFFICULTY_PROF ID_DIFFICULTY_BASE+2
-
-#define SKILL_BEGIN 5
-#define SKILL_INTER 10
-#define SKILL_PROF 17
-
 
 KBoxes::KBoxes()
 {
@@ -68,6 +55,7 @@ void KBoxes::initMenuBar()
 	skillMenu->insertItem("&Beginner", ID_DIFFICULTY_BEGIN);
 	skillMenu->insertItem("&Intermediate", ID_DIFFICULTY_INTER);
 	skillMenu->insertItem("&Professional", ID_DIFFICULTY_PROF);
+	skillMenu->insertItem("I&mpossible", ID_DIFFICULTY_IMPOS);
 	skillMenu->setItemChecked ( ID_DIFFICULTY_BEGIN, true );
 	connect ( skillMenu, SIGNAL (activated(int)), this, SLOT (slotSkillChanged(int)) );
 
@@ -160,14 +148,17 @@ void KBoxes::slotSkillChanged (int ID)
 	case ID_DIFFICULTY_PROF:
 		skill = SKILL_PROF;
 		break;
+	case ID_DIFFICULTY_IMPOS:
+		skill = SKILL_IMPOS;
+		break;
 	default:
 		break;
 	}
 	skillMenu->setItemChecked ( ID_DIFFICULTY_BEGIN, false );
 	skillMenu->setItemChecked ( ID_DIFFICULTY_INTER, false );
 	skillMenu->setItemChecked ( ID_DIFFICULTY_PROF, false );
+	skillMenu->setItemChecked ( ID_DIFFICULTY_IMPOS, false );
 	skillMenu->setItemChecked ( ID, true );
-	cerr << skill << endl;
 }
 
 
@@ -271,6 +262,9 @@ void KBoxes::initFirstTime()
 	level[14] = "12223";
 	level[15] = "12333";
 	level[16] = "12344";
+	for ( int i = 0 ; i < 17 ; i++ ) {
+		level[17+i] = "11" + level[i];		// "impossible" levels
+	}
 }
 
 /** The computer does its move */
@@ -328,41 +322,83 @@ void KBoxes::playComputer()
 	for ( int i = 0; i < skill ; i++ ) {
 		/* Find first if the number of free areas are too many or too little */
 		string solving (level[i]);			// the current level data
-		if ( fabs(solving.length() - freeLength.length()) < 2  ) {
+		int difference =  solving.length() - freeLength.length() ;
+		if ( difference < 2 && difference > -2 ) {	// If the difference of the # of areas is bigger than 1, there isn't any solution for this
 			/* Find if there is a match by just deleting a whole line */
 			if ( solving.length() < freeLength.length()) {
 				length = freeLength.length();
 				int j;
 				for ( j = 0; j < length; j++ ) {
-					if ( (solving.substr(0, j) + freeLength[j] + solving.substr(j)) == freeLength ) {
-						break;
+					// Try to find if there is only one difference. Imagine that from the solutions string is missing _one_ character, the one from the freeLength.
+					if ( (solving.substr(0, j) + freeLength[j] + solving.substr(j)) == freeLength ) {	// if 'both' strings match, means that it *is* missing a character
+						break;				// OK, found.
 					}
 				}
-				if ( j <= length ) {
-					int begTemp = freePos[j] - '0', lenTemp = freeLength[j] - '0';
+				if ( j < length ) {		// if it is found,
+					int begTemp = (freePos[j] - '0'), lenTemp = (freeLength[j] - '0');	// count the positions of the boces to be wiped out.
 					wipeOut ( begTemp, begTemp + lenTemp -1, COMPUTER );
 					return;
 				}
 			}
+			/*Find if it sould be wiped out _some_ (not all) boxes, from the beginning of the area till a specific point*/
 			else if ( solving.length() == freeLength.length() ) {
-			/*Find if there is only one difference with the data already shown   */
-				int last_diff_pos = -1;
-				int count_diff = 0;
-				length = freeLength.length();
+				int count_diff = 0;			// store how many differences we have with the solving string
+				string freeTemp ( freeLength ) ;	// temporary string, image of freeLength. Used to check the differental strings
+				int last_wrong_pos;					// store where was the 'right' length in solving string, in order to win
+				length = freeLength.length();		// count the length of the freeTemp/solving etc. string
+
 				for ( int j = 0; j < length ; j++ ) {
-					if ( solving[j] != freeLength[j] ) {		// A mismatch found
-						last_diff_pos = j;						// Remember position
-						count_diff++;							// count mismatch
+					int found = freeTemp.find (solving[j] );	// find if this character exists in the freeTemp string
+					if ( found >= 0 ) {				// really exists
+						freeTemp[found]=' ';			// wipe out this position
+					}
+					else {    							// doesn't exist
+						count_diff++;					// count how many are these wrong cells
+						last_wrong_pos = j;				// remember the position in the solving string of the unmatched character
 					}
 				}
 				if ( count_diff == 1 ) {						// If ONLY 1 mismatch found
-					int remaining = freeLength[last_diff_pos] - solving[last_diff_pos];
+					int where = freeTemp.find_first_not_of (" ");
+					int remaining = freeLength[where] - solving[last_wrong_pos];
     				if ( remaining > 0 ) {
-						int begTemp = freePos[last_diff_pos] - '0';
+						int begTemp = freePos[where] - '0';
 						wipeOut ( begTemp, begTemp + remaining-1, COMPUTER );
 						return;
 					}
 				}
+			}
+			/*Find if it sould be wiped out _some_ (not all) boxes, in between the area */
+			else if ( solving.length() > freeLength.length()) {		// # solution-areas is one more than the # of freeLength-areas
+				string freeTemp ( freeLength ) ;	// temporary string, image of freeLength. Used to check the differental strings
+				string solvTemp ( solving ) ;		// temporary string, image of solving. Used to check the differental strings
+				length = freeTemp.length();		// count the length of the freeTemp string. Should be <= solvTemp string
+
+				for ( int j = 0; j < length ; j++ ) {
+					int found = solvTemp.find (freeTemp[j] );	// find if a character from freeTemp exists in the solvTemp string
+					if ( found >= 0 ) {				// really exists
+						freeTemp[j] = ' ';			// wipe out this position from freeTemp
+						solvTemp[found] = ' ';				// wipe out this position from solvTemp
+					}
+				}
+
+				if ( ( countSpaces ( freeTemp ) + 1) == length ) { 		// found only one difference
+					int where_in_free = freeTemp.find_first_not_of (" ");
+					int where_in_solv_first = solvTemp.find_first_not_of (" ");
+					int where_in_solv_last = solvTemp.find_last_not_of (" ");
+
+					int free_length = freeTemp[where_in_free]-'0';
+					int solv_length_first = solvTemp[where_in_solv_first]-'0';
+					int solv_length_last = solvTemp[where_in_solv_last]-'0';
+
+					int remaining = free_length - solv_length_first - solv_length_last;
+					if ( remaining > 0 ) {			// has enough boxes for it
+						int begTemp = freePos[where_in_free] - '0';
+						begTemp += solv_length_first;
+						wipeOut ( begTemp, begTemp + remaining-1, COMPUTER );
+						return;
+					}
+				}
+
 			}
 		}
 	}
@@ -371,7 +407,7 @@ void KBoxes::playComputer()
 
 /** Display an error message */
 void KBoxes::error () const{
-	cerr << "ERROR!" << endl;
+	cerr << "ERROR!" << '\a' << endl;
 }
 /** Come here when the player wins. */
 void KBoxes::playerWins()
@@ -422,4 +458,16 @@ void KBoxes::wipeOut(int first, int last, player_type player)
 			playerWins();
 		}
 	}
+}
+/** Count how many spaces a string has */
+int KBoxes::countSpaces ( const string & str) const
+{
+	int res = 0;
+	int length = str.length();
+	for ( int i = 0 ; i < length ; i++ ) {
+		if ( str[i]==' ' ) {
+			res ++ ;
+		}
+	}
+	return res;
 }
