@@ -36,7 +36,7 @@ dnl Perform program name transformation
 AC_ARG_PROGRAM
 
 dnl Automake doc recommends to do this only here. (Janos)
-AM_INIT_AUTOMAKE($APPNAMELC$, $VERSION$) dnl searches for some needed programs
+AM_INIT_AUTOMAKE(@MODULENAME@, @VERSION@) dnl searches for some needed programs
 
 KDE_SET_PREFIX
 
@@ -53,30 +53,5 @@ dnl for NLS support. Call them in this order!
 dnl WITH_NLS is for the po files
 AM_KDE_WITH_NLS
 
-KDE_USE_QT(3.0.0)
+dnl KDE_USE_QT
 AC_PATH_KDE
-#MIN_CONFIG(3.0.0)
-
-dnl PACKAGE set before
-AC_C_BIGENDIAN
-AC_CHECK_KDEMAXPATHLEN
-
-KDE_CREATE_SUBDIRSLIST
-AC_CONFIG_FILES([ Makefile ])
-AC_CONFIG_FILES([ doc/Makefile ])
-AC_CONFIG_FILES([ doc/en/Makefile ])
-AC_CONFIG_FILES([ po/Makefile ])
-AC_CONFIG_FILES([ src/Makefile ])
-AC_OUTPUT
-if test "$all_tests" = "bad"; then
-  if test ! "$cache_file" = "/dev/null"; then
-    echo ""    
-    echo "Please remove the file $cache_file after changing your setup"
-    echo "so that configure will find the changes next time."
-    echo ""
-  fi
-else
-  echo ""
-  echo "Good - your configure finished. Start make now"
-  echo ""
-fi
