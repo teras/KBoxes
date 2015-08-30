@@ -52,7 +52,7 @@ as Authors, publish date, the abstract, and Keywords -->
 <othername></othername>
 <surname>Panayotis Katsaloulis</surname>
 <affiliation>
-<address><email>panayotis@panayotis.com</email></address>
+<address>http://www.panayotis.com</address>
 </affiliation>
 </author>
 </authorgroup>
@@ -436,7 +436,7 @@ distribution. -->
 &kboxes;
 </para>
 <para>
-Program copyright %{YEAR} Panayotis Katsaloulis <email>panayotis@panayotis.com</email>
+Program copyright %{YEAR} Panayotis Katsaloulis http://www.panayotis.com
 </para>
 <para>
 Contributors:
@@ -449,7 +449,7 @@ Contributors:
 </para>
 
 <para>
-Documentation copyright %{YEAR} Panayotis Katsaloulis <email>panayotis@panayotis.com</email>
+Documentation copyright %{YEAR} Panayotis Katsaloulis http://www.panayotis.com
 </para>
 
 <!-- TRANS:CREDIT_FOR_TRANSLATORS -->

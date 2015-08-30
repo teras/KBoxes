@@ -3,7 +3,7 @@
                              -------------------
     begin                : Πεμ Ιαν 20 17:36:13 EET 2000
     copyright            : (C) 2000 by Panos Katsaloulis
-    email                : panayotis@panayotis.com
+    url                  : http://www.panayotis.com
  ***************************************************************************/
 
 /***************************************************************************
@@ -29,7 +29,7 @@
 // General application values
 #define IDS_APP_ABOUT               "         KBoxes!\nVersion " VERSION \
                                     "\n(c) 1994-2000 by Panos Katsaloulis" \
-									"\n\n Please send bugs and reports to panayotis@panayotis.com"
+									"\n\n Please send bugs and reports to http://www.panayotis.com"
 
 #define IDS_APP_HOWTO				"            * HOW TO PLAY *\n\n" \
 								"   The purpose of this game is to wipe out \n" \
